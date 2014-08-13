@@ -4,7 +4,7 @@
 Written in GoLang, this utility copies some or all rows of a Postgres database table as INSERT or UPDATE statements.  All columns are included in the INSERT or UPDATE statements.
 
 A couple of binaries to save you the effort:
-[Mac](https://github.com/joncrlsn/pgrun/raw/master/bin-osx/pgcp "OSX version")  [Linux](https://github.com/joncrlsn/pgrun/raw/master/bin-linux/pgcp "Linux version")
+[Mac](https://github.com/joncrlsn/pgcp/raw/master/bin-osx/pgcp "OSX version")  [Linux](https://github.com/joncrlsn/pgcp/raw/master/bin-linux/pgcp "Linux version")
 
 ## usage
 
