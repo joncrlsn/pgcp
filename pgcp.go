@@ -175,7 +175,8 @@ func querySqlValues(db *sql.DB, query string) (chan map[string]string, []string)
 					row[columnNames[i]] = "'" + valPtr.(string) + "'"
 				case int64:
 					row[columnNames[i]] = fmt.Sprintf("%d", valPtr)
-					//row[columnNames[i]] = string(valPtr.(int64))
+				case float64:
+					row[columnNames[i]] = fmt.Sprintf("%f", valPtr)
 				case bool:
 					row[columnNames[i]] = fmt.Sprintf("%t", valPtr)
 				case time.Time:
