@@ -185,7 +185,7 @@ func querySqlValues(db *sql.DB, query string) (chan map[string]string, []string)
 					row[columnNames[i]] = fmt.Sprintf("%v", valPtr)
 				default:
 					row[columnNames[i]] = fmt.Sprintf("%v", valPtr)
-					fmt.Println("Column %s is an unhandled type: %v", columnNames[i], valueType)
+					fmt.Println("-- Warning, column %s is an unhandled type: %v", columnNames[i], valueType)
 				}
 			}
 			rowChan <- row
