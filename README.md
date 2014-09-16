@@ -36,11 +36,11 @@ Argument            | Explanation
 
 #### Optional database environment variables
 
-Name   | Explanation
------  | -----------
-DBHOST | host name where database is running (default is localhost)
-DBPORT | port database is listening on (default is 5432)
-DBNAME | name of database you want to copy
-DBUSER | user in postgres you'll be executing the queries as
-DBPASS | password for the user
-DBOPTIONS | one or more database options (like sslmode=disable)
+Name       | Explanation
+---------  | -----------
+PGHOST     | host name where database is running (matches psql)
+PGPORT     | port database is listening on (default is 5432) (matches psql)
+PGDATABASE | name of database you want to copy (matches psql)
+PGUSER     | user in postgres you'll be executing the queries as (matches psql)
+PGPASSWORD | password for the user (matches psql)
+PGOPTION   | one or more database options (like sslmode=disable)

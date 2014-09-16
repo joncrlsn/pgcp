@@ -220,11 +220,12 @@ Database connection information can be specified in two ways:
   * Note that if password is not specified, you will be prompted.
 
 Optional Environment variables (if program flags are not desirable):
-  DBHOST : host name where database is running (default is localhost)
-  DBPORT : port database is listening on (default is 5432)
-  DBNAME : name of database you want to copy
-  DBUSER : user in postgres you'll be executing the queries as
-  DBPASS : password for the user
+  PGHOST     : host name where database is running (default is localhost)
+  PGPORT     : port database is listening on (default is 5432)
+  PGDATABASE : name of database you want to copy
+  PGUSER     : user in postgres you'll be executing the queries as
+  PGPASSWORD : password for the postgres user
+  PGOPTION  : options (like sslmode=disable)
 `)
 
 	os.Exit(2)
