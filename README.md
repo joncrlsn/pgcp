@@ -3,14 +3,22 @@
 
 Written in GoLang, this utility copies some or all rows of a Postgres database table as INSERT or UPDATE statements.  All columns are included in the INSERT or UPDATE statements.
 
-A couple of binaries to save you the effort:
-[Mac](https://github.com/joncrlsn/pgcp/raw/master/bin-osx/pgcp "OSX version")  [Linux](https://github.com/joncrlsn/pgcp/raw/master/bin-linux/pgcp "Linux version")
+Binaries for quick downloading: 
+[osx64](https://github.com/joncrlsn/pgcp/raw/master/bin-osx64/pgcp "OSX 64-bit version") 
+[osx32](https://github.com/joncrlsn/pgcp/raw/master/bin-osx32/pgcp "OSX version")
+[linux64](https://github.com/joncrlsn/pgcp/raw/master/bin-linux64/pgcp "Linux 64-bit version")
+[linux32](https://github.com/joncrlsn/pgcp/raw/master/bin-linux32/pgcp "Linux version")
+[win64](https://github.com/joncrlsn/pgcp/raw/master/bin-win64/pgcp "Windows 64-bit version")
+[win32](https://github.com/joncrlsn/pgcp/raw/master/bin-win32/pgcp "Windows version")
 
-## usage
-
+### usage
 	pgcp [database flags] <genType> <tableName> [idColumn] <whereClause>
 
+### examples
+	pgcp -U dbuser -h 10.10.41.55 -d userdb INSERT users         "where user_id > 10"
+	pgcp -U dbuser -h 10.10.41.55 -d userdb UPDATE users user_id "where user_id > 10"
 
+### flags
 database flags | Explanation 
 -------------: | -------------
   -U           | postgres user   (matches psql flag)
@@ -24,7 +32,7 @@ Argument            | Explanation
 --------:           | -------------
 &lt;genType&gt;     | type of SQL to generate: INSERT or UPDATE.<br/>(case insensitive)
 &lt;tableName&gt;   | name of table to be outputted (fully or partially)
-\[idColumn\]        | only used when genType is "update"
+\[idColumn\]        | only used when genType is UPDATE
 &lt;whereClause&gt; | specifies which rows to copy.  example:<br> "WHERE user_id < 100 AND username IS NOT NULL"
 
 #### Database connection information can be specified in up to three ways:
