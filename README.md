@@ -8,8 +8,8 @@ Binaries for quick downloading:
 [osx32](https://github.com/joncrlsn/pgcp/raw/master/bin-osx32/pgcp "OSX version")
 [linux64](https://github.com/joncrlsn/pgcp/raw/master/bin-linux64/pgcp "Linux 64-bit version")
 [linux32](https://github.com/joncrlsn/pgcp/raw/master/bin-linux32/pgcp "Linux version")
-[win64](https://github.com/joncrlsn/pgcp/raw/master/bin-win64/pgcp "Windows 64-bit version")
-[win32](https://github.com/joncrlsn/pgcp/raw/master/bin-win32/pgcp "Windows version")
+[win64](https://github.com/joncrlsn/pgcp/raw/master/bin-win64/pgcp.exe "Windows 64-bit version")
+[win32](https://github.com/joncrlsn/pgcp/raw/master/bin-win32/pgcp.exe "Windows version")
 
 ### usage
 	pgcp [database flags] <genType> <tableName> [idColumn] <whereClause>
