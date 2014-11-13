@@ -10,6 +10,9 @@ A couple of binaries to save you the effort:
 
 	pgcp [database flags] <genType> <tableName> [idColumn] <whereClause>
 
+Examples:
+	pgcp -U dbuser -h 10.10.41.55 -d userdb INSERT users         "where user_id > 10"
+	pgcp -U dbuser -h 10.10.41.55 -d userdb UPDATE users user_id "where user_id > 10"
 
 database flags | Explanation 
 -------------: | -------------
