@@ -3,7 +3,9 @@
 
 Written in GoLang, this utility copies some or all rows of a Postgres database table as INSERT or UPDATE statements.  All columns are included in the INSERT or UPDATE statements.
 
-Binaries for quick downloading: 
+Suggestions to make this more useful and "idiomatic Go" will be appreciated.
+
+### download
 [osx64](https://github.com/joncrlsn/pgcp/raw/master/bin-osx64/pgcp "OSX 64-bit version") 
 [osx32](https://github.com/joncrlsn/pgcp/raw/master/bin-osx32/pgcp "OSX version")
 [linux64](https://github.com/joncrlsn/pgcp/raw/master/bin-linux64/pgcp "Linux 64-bit version")
@@ -19,13 +21,13 @@ Binaries for quick downloading:
 	pgcp -U dbuser -h 10.10.41.55 -d userdb UPDATE users user_id "where user_id > 10"
 
 ### flags
-database flags | Explanation 
--------------: | -------------
-  -U           | postgres user   (matches psql flag)
-  -h           | database host -- default is localhost (matches psql flag)
-  -p           | port.  defaults to 5432 (matches psql flag)
-  -d           | database name (matches psql flag)
-  -pw          | password for the postgres user<br>(if not provided then you'll be prompted)
+database flag | Explanation 
+------------: | -------------
+  -U          | postgres user   (matches psql flag)
+  -h          | database host -- default is localhost (matches psql flag)
+  -p          | port.  defaults to 5432 (matches psql flag)
+  -d          | database name (matches psql flag)
+  -pw         | password for the postgres user<br>(if not provided then you'll be prompted)
 
 
 Argument            | Explanation 
@@ -35,14 +37,14 @@ Argument            | Explanation
 \[idColumn\]        | only used when genType is UPDATE
 &lt;whereClause&gt; | specifies which rows to copy.  example:<br> "WHERE user_id < 100 AND username IS NOT NULL"
 
-#### Database connection information can be specified in up to three ways:
+### database connection information can be specified in up to three ways:
 
   * Environment variables (keeps you from typing them in often)
   * Program flags (overrides environment variables.  See above)
   * ~/.pgpass file (may contain password for the previously specified user)
   * Note that if password is not specified, you will be prompted.
 
-#### Optional database environment variables
+### optional database environment variables
 
 Name       | Explanation
 ---------  | -----------

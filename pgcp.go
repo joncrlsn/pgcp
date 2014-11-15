@@ -73,7 +73,7 @@ func main() {
 	check("opening database", err)
 
 	query := "SELECT * FROM " + tableName + " " + whereClause
-	fmt.Println("-- Running query:", query)
+	fmt.Printf("-- Creating %s(s) from query: %s\n", genType, query)
 	rowChan, columnNames := querySqlValues(db, query)
 
 	for row := range rowChan {
