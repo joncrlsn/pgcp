@@ -19,8 +19,8 @@ Suggestions and modifications to make this more useful and "idiomatic Go" will b
 	pgcp -U dbuser -h 10.10.41.55 -d userdb INSERT users         "where user_id < 10"
 	pgcp -U dbuser -h 10.10.41.55 -d userdb UPDATE users user_id "where user_id < 10"
 
-#### flags (these mostly match psql arguments):
-program flag         | Explanation
+#### options/flags (these mostly match psql arguments):
+program flag/option  | explanation
 -------------------: | -------------
   -V, --version      | prints the version of pgcp being run
   -?, --help         | prints a summary of the commands accepted by pgcp
@@ -32,7 +32,7 @@ program flag         | Explanation
   -w, --no-password  | Never issue a password prompt
   -W, --password     | Force a password prompt
 
-Argument            | Explanation 
+argument            | explanation 
 --------:           | -------------
 &lt;genType&gt;     | type of SQL to generate: INSERT or UPDATE.<br/>(case insensitive)
 &lt;tableName&gt;   | name of table to be outputted (fully or partially)
@@ -48,7 +48,7 @@ Argument            | Explanation
 
 ### optional database environment variables
 
-Name       | Explanation
+name       | explanation
 ---------  | -----------
 PGHOST     | host name where database is running (matches psql)
 PGPORT     | port database is listening on (default is 5432) (matches psql)
@@ -56,3 +56,8 @@ PGDATABASE | name of database you want to copy (matches psql)
 PGUSER     | user in postgres you'll be executing the queries as (matches psql)
 PGPASSWORD | password for the user (matches psql)
 PGOPTION   | one or more database options (like sslmode=disable)
+
+### todo
+1. Fix bug where Ctrl-C in the password entry field messes up the console.
+2. Convert positional arguments to program options/flags?  How important is this to people?
+3. Add database options that may be requested by others (that fit with the purpose of this tool).
