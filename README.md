@@ -22,8 +22,8 @@ Suggestions and modifications to make this more useful and "idiomatic Go" will b
 #### flags (these mostly match psql arguments):
 program flag         | Explanation
 -------------------: | -------------
-  -V, --version      | prints the version of pgrun being run
-  -?, --help         | prints a summary of the commands accepted by pgrun
+  -V, --version      | prints the version of pgcp being run
+  -?, --help         | prints a summary of the commands accepted by pgcp
   -U, --user         | user in postgres to execute the commands
   -h, --host         | host name where database is running (default is localhost)
   -p, --port         | port database is listening on (default is 5432)
