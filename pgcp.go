@@ -5,7 +5,7 @@ import "fmt"
 //import "reflect"
 import "time"
 import "log"
-import "flag"
+import flag "github.com/ogier/pflag"
 import "os"
 import "strings"
 import "database/sql"
@@ -14,6 +14,7 @@ import "github.com/joncrlsn/pgutil"
 import "github.com/joncrlsn/misc"
 
 const isoFormat = "2006-01-02T15:04:05.000-0700"
+const version = "1.0.4"
 
 /*
  * Queries the given table name and copies the column values to either an INSERT statement or
@@ -22,10 +23,22 @@ const isoFormat = "2006-01-02T15:04:05.000-0700"
  * Example: pgcp -U myuser -d mydb INSERT t_user "WHERE user_id < 4"
  */
 func main() {
+
+	var verFlag bool
+	var helpFlag bool
+	flag.BoolVarP(&verFlag, "version", "V", false, "Displays version information")
+	flag.BoolVarP(&helpFlag, "help", "?", false, "Displays usage help")
+
 	dbInfo := pgutil.DbInfo{}
 	dbInfo.Populate()
-	//fmt.Println("dbInfo:", dbInfo)
-	//fmt.Println("connection string:", dbInfo.ConnectionString())
+
+	if verFlag {
+		fmt.Printf("%s - version %s\n", os.Args[0], version)
+		os.Exit(0)
+	}
+	if helpFlag {
+		usage()
+	}
 
 	// Remaining args:
 	args := flag.Args()
@@ -89,7 +102,6 @@ func generateInsert(tableName string, row map[string]string, colNames []string) 
 	fmt.Printf("INSERT INTO %s (", tableName)
 	first := true
 	for _, name := range colNames {
-		//fmt.Println("ix/name:", ix, name)
 		if !first {
 			fmt.Print(", ")
 		}
@@ -170,9 +182,9 @@ func querySqlValues(db *sql.DB, query string) (chan map[string]string, []string)
 				case nil:
 					row[columnNames[i]] = "null"
 				case []uint8:
-					row[columnNames[i]] = "'" + string(valPtr.([]byte)) + "'"
+					row[columnNames[i]] = "'" + strings.Replace(string(valPtr.([]byte)), "'", "''", -1) + "'"
 				case string:
-					row[columnNames[i]] = "'" + valPtr.(string) + "'"
+					row[columnNames[i]] = "'" + strings.Replace(valPtr.(string), "'", "''", -1) + "'"
 				case int64:
 					row[columnNames[i]] = fmt.Sprintf("%d", valPtr)
 				case float64:
@@ -200,12 +212,16 @@ func usage() {
 	fmt.Fprintln(os.Stderr, `
 Copies table data as either INSERT or UPDATE statements.
 
-[database flags]: (optional)
-  -U     : postgres user (matches psql flag)
-  -h     : database host -- default is localhost (matches psql flag)
-  -p     : port.  defaults to 5432 (matches psql flag)
-  -d     : database name (matches psql flag)
-  -pw    : password for the postgres user (otherwise you'll be prompted)
+Program flags are:
+  -V, --version      : prints the version of pgcp being run
+  -?, --help         : prints a summary of the commands accepted by pgcp
+  -U, --user         : user in postgres to execute the commands
+  -h, --host         : host name where database is running (default is localhost)
+  -p, --port         : port database is listening on (default is 5432)
+  -d, --dbname       : database name
+  -O, --options      : postgresql connection options (like sslmode=disable)
+  -w, --no-password  : Never issue a password prompt
+  -W, --password     : Force a password prompt
 
 <genType>     : type of SQL to generate: insert, update
 
@@ -225,7 +241,7 @@ Optional Environment variables (if program flags are not desirable):
   PGDATABASE : name of database you want to copy
   PGUSER     : user in postgres you'll be executing the queries as
   PGPASSWORD : password for the postgres user
-  PGOPTION  : options (like sslmode=disable)
+  PGOPTION   : options (like sslmode=disable)
 `)
 
 	os.Exit(2)
