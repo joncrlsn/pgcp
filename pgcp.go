@@ -14,7 +14,7 @@ import "github.com/joncrlsn/pgutil"
 import "github.com/joncrlsn/misc"
 
 const isoFormat = "2006-01-02T15:04:05.000-0700"
-const version = "1.0.4"
+const version = "1.0.5"
 
 /*
  * Queries the given table name and copies the column values to either an INSERT statement or

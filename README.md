@@ -58,6 +58,7 @@ PGPASSWORD | password for the user (matches psql)
 PGOPTION   | one or more database options (like sslmode=disable)
 
 ### todo
-1. Fix bug where Ctrl-C in the password entry field messes up the console.
+1. ~~Fix bug where Ctrl-C in the password entry field messes up the console.~~ fixed in version 1.0.5
 2. Convert positional arguments to program options/flags?  How important is this to people?
-3. Add database options that may be requested by others (that fit with the purpose of this tool).
+3. Improve the accuracy of parsing ~/.pgpass
+4. Add database options that may be requested by others (that fit with the purpose of this tool).
