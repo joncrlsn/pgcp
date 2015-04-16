@@ -2,19 +2,36 @@ package main
 
 import "fmt"
 
-//import "reflect"
-import "time"
-import "log"
-import flag "github.com/ogier/pflag"
-import "os"
-import "strings"
-import "database/sql"
-import _ "github.com/lib/pq"
-import "github.com/joncrlsn/pgutil"
-import "github.com/joncrlsn/misc"
+import (
+	"database/sql"
+	"github.com/joncrlsn/misc"
+	"github.com/joncrlsn/pgutil"
+	_ "github.com/lib/pq"
+	flag "github.com/ogier/pflag"
+	"log"
+	"os"
+	"strings"
+	"time"
+)
 
 const isoFormat = "2006-01-02T15:04:05.000-0700"
-const version = "1.0.5"
+const version = "1.0.6"
+
+// out defaults to standard out, but can be overwritten with a traditional file
+// via the -o flag
+var out *os.File = os.Stdout
+
+func print(a ...interface{}) (int, error) {
+	return fmt.Fprint(out, a...)
+}
+
+func println(a ...interface{}) (int, error) {
+	return fmt.Fprintln(out, a...)
+}
+
+func printf(format string, a ...interface{}) (int, error) {
+	return fmt.Fprintf(out, format, a...)
+}
 
 /*
  * Queries the given table name and copies the column values to either an INSERT statement or
@@ -24,18 +41,20 @@ const version = "1.0.5"
  */
 func main() {
 
-	var verFlag bool
-	var helpFlag bool
-	flag.BoolVarP(&verFlag, "version", "V", false, "Displays version information")
-	flag.BoolVarP(&helpFlag, "help", "?", false, "Displays usage help")
+	var outputFileName string
+	flag.StringVarP(&outputFileName, "output-file", "o", "", "Sends output to a file")
 
 	dbInfo := pgutil.DbInfo{}
-	dbInfo.Populate()
+	verFlag, helpFlag := dbInfo.Populate()
 
 	if verFlag {
-		fmt.Printf("%s - version %s\n", os.Args[0], version)
-		os.Exit(0)
+		fmt.Fprintf(os.Stderr, "%s version %s\n", os.Args[0], version)
+		fmt.Fprintln(os.Stderr, "Copyright (c) 2015 Jon Carlson.  All rights reserved.")
+		fmt.Fprintln(os.Stderr, "Use of this source code is governed by the MIT license")
+		fmt.Fprintln(os.Stderr, "that can be found here: http://opensource.org/licenses/MIT")
+		os.Exit(1)
 	}
+
 	if helpFlag {
 		usage()
 	}
@@ -52,6 +71,16 @@ func main() {
 	if genType != "INSERT" && genType != "UPDATE" {
 		fmt.Fprintf(os.Stderr, "Invalid generation type: %s.  Requires either INSERT or UPDATE\n", genType)
 		usage()
+	}
+
+	if len(outputFileName) > 0 {
+		var err error
+		out, err = os.Create(outputFileName)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Cannot open file: %s. \n", outputFileName)
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(2)
+		}
 	}
 
 	// tableName
@@ -86,7 +115,7 @@ func main() {
 	check("opening database", err)
 
 	query := "SELECT * FROM " + tableName + " " + whereClause
-	fmt.Printf("-- Creating %s(s) from query: %s\n", genType, query)
+	printf("-- Creating %s(s) from query: %s\n", genType, query)
 	rowChan, columnNames := querySqlValues(db, query)
 
 	for row := range rowChan {
@@ -99,30 +128,30 @@ func main() {
 }
 
 func generateInsert(tableName string, row map[string]string, colNames []string) {
-	fmt.Printf("INSERT INTO %s (", tableName)
+	printf("INSERT INTO %s (", tableName)
 	first := true
 	for _, name := range colNames {
 		if !first {
-			fmt.Print(", ")
+			print(", ")
 		}
-		fmt.Printf(name)
+		printf(name)
 		first = false
 	}
-	fmt.Print(") VALUES (")
+	print(") VALUES (")
 	first = true
 	for _, name := range colNames {
 		if !first {
-			fmt.Print(", ")
+			print(", ")
 		}
 		v := row[name]
-		fmt.Printf(v)
+		printf(v)
 		first = false
 	}
-	fmt.Println(");")
+	println(");")
 }
 
 func generateUpdate(tableName string, row map[string]string, idCol string) {
-	fmt.Printf("UPDATE %s SET ", tableName)
+	printf("UPDATE %s SET ", tableName)
 	idVal := ""
 	idColFound := false
 	first := true
@@ -132,9 +161,9 @@ func generateUpdate(tableName string, row map[string]string, idCol string) {
 			idColFound = true
 		} else {
 			if !first {
-				fmt.Print(", ")
+				print(", ")
 			}
-			fmt.Printf("%s=%s", k, v)
+			printf("%s=%s", k, v)
 			first = false
 		}
 	}
@@ -142,8 +171,8 @@ func generateUpdate(tableName string, row map[string]string, idCol string) {
 		log.Fatalf("\nid column not found: %s\n", idCol)
 		os.Exit(1)
 	}
-	fmt.Printf(" WHERE %s=%s", idCol, idVal)
-	fmt.Println(";")
+	printf(" WHERE %s=%s", idCol, idVal)
+	println(";")
 }
 
 /*
@@ -177,7 +206,7 @@ func querySqlValues(db *sql.DB, query string) (chan map[string]string, []string)
 			row := make(map[string]string)
 			// Convert each cell to a SQL-valid string representation
 			for i, valPtr := range vals {
-				//fmt.Println(reflect.TypeOf(valPtr))
+				//println(reflect.TypeOf(valPtr))
 				switch valueType := valPtr.(type) {
 				case nil:
 					row[columnNames[i]] = "null"
@@ -197,7 +226,7 @@ func querySqlValues(db *sql.DB, query string) (chan map[string]string, []string)
 					row[columnNames[i]] = fmt.Sprintf("%v", valPtr)
 				default:
 					row[columnNames[i]] = fmt.Sprintf("%v", valPtr)
-					fmt.Println("-- Warning, column %s is an unhandled type: %v", columnNames[i], valueType)
+					println("-- Warning, column %s is an unhandled type: %v", columnNames[i], valueType)
 				}
 			}
 			rowChan <- row
@@ -222,6 +251,7 @@ Program flags are:
   -O, --options      : postgresql connection options (like sslmode=disable)
   -w, --no-password  : Never issue a password prompt
   -W, --password     : Force a password prompt
+  -o, --output-file  : Sends output to the given file
 
 <genType>     : type of SQL to generate: insert, update
 

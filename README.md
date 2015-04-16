@@ -29,8 +29,9 @@ program flag/option  | explanation
   -p, --port         | port database is listening on (default is 5432)
   -d, --dbname       | database name
   -O, --options      | postgresql connection options (like sslmode=disable)
-  -w, --no-password  | Never issue a password prompt
-  -W, --password     | Force a password prompt
+  -w, --no-password  | Never issue a db password prompt
+  -W, --password     | Force a db password prompt
+  -o, --output-file  | Send output to the given file  
 
 argument            | explanation 
 --------:           | -------------
@@ -59,6 +60,7 @@ PGOPTION   | one or more database options (like sslmode=disable)
 
 ### todo
 1. ~~Fix bug where Ctrl-C in the password entry field messes up the console.~~ fixed in version 1.0.5
+1. ~~Fix -? and -V flags that are not working.~~ Fixed in version 1.0.6
+1. ~~Add --output-file (-o) flag~~ Added in version 1.0.6
 2. Convert positional arguments to program options/flags?  How important is this to people?
 3. Improve the accuracy of parsing ~/.pgpass
-4. Add database options that may be requested by others (that fit with the purpose of this tool).
