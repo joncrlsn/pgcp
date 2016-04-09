@@ -5,12 +5,9 @@ Written in GoLang, this utility copies some or all rows of a Postgres database t
 Suggestions and modifications to make this more useful and "idiomatic Go" will be appreciated.
 
 ### download
-[osx64](https://github.com/joncrlsn/pgcp/raw/master/bin-osx64/pgcp "OSX 64-bit version") 
-[osx32](https://github.com/joncrlsn/pgcp/raw/master/bin-osx32/pgcp "OSX version")
-[linux64](https://github.com/joncrlsn/pgcp/raw/master/bin-linux64/pgcp "Linux 64-bit version")
-[linux32](https://github.com/joncrlsn/pgcp/raw/master/bin-linux32/pgcp "Linux version")
-[win64](https://github.com/joncrlsn/pgcp/raw/master/bin-win64/pgcp.exe "Windows 64-bit version")
-[win32](https://github.com/joncrlsn/pgcp/raw/master/bin-win32/pgcp.exe "Windows version")
+[osx](https://github.com/joncrlsn/pgcp/raw/master/bin-osx/pgcp "OSX version") 
+[linux](https://github.com/joncrlsn/pgcp/raw/master/bin-linux/pgcp "Linux version")
+[windows](https://github.com/joncrlsn/pgcp/raw/master/bin-win/pgcp.exe "Windows version")
 
 ### usage
 	pgcp [database flags] <genType> <tableName> [idColumn] <whereClause>
